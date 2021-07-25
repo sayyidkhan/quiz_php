@@ -101,7 +101,19 @@ li {
   display: inline;
 }
 
+/* buttons on the same row */
 
+.buttons-homepage {
+width: 200px;
+margin: 0 auto;
+display: inline;
+}
+
+.action-btn-homepage {
+width: 200px;
+margin: 0 auto;
+display: inline;
+}
 
 
 
