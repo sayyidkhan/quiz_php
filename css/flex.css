@@ -1,0 +1,161 @@
+.flex-container {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+}
+
+.flex-child {
+    flex: 1;
+    border: 2px solid yellow;
+}
+
+.dotted {
+  border-style: dotted;
+}
+
+.solidborder {
+  border-style: outset;
+  border-width: 4px;
+  border-color: #0d6efd;
+}
+
+/* bike listing */
+
+.flex-bikelisting-parent {
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 10px;
+  grid-template-rows: 405px 405px;
+  grid-template-columns: 405px 405px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.flex-bikelisting-child {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.bike-img-format {
+    width:380px;
+    height:200px;
+    padding: 4px;
+    border: 1px solid grey;
+}
+
+
+/* each box text size */
+.bikeid-text {
+    font-size: 16px;
+    line-height: 0.6;
+}
+
+.required-text {
+    font-size: 14px;
+    line-height: 0.6;
+    color: red;
+}
+
+.title-text {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 0.6;
+}
+
+.price-text {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 0.8;
+}
+
+.price-text-div {
+    float: right;
+    margin-right: 0.5em;
+}
+
+.description-text {
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.attributes-text {
+    font-size: 16px;
+    line-height: 0.4;
+}
+
+.interested-users {
+  /* font */
+  font-size: 16px;
+  line-height: 0.6;
+  /* design */
+  padding: 0.5em;
+  width: 200px;
+  border-style: outset;
+  background-color: #007bff;
+  color: white;
+}
+
+/* search box */
+.boxsizing {
+  box-sizing: border-box;
+}
+
+form.bikesearch input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 55%;
+  background: #f1f1f1;
+}
+
+form.bikesearch button {
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.bikesearch button:hover {
+  background: #0b7dda;
+}
+
+form.bikesearch::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/*scroll feature */
+.scrollfeature {
+    height: 850px;
+    width: 880px;
+    overflow: auto;
+    margin-left: -5px;
+}
+
+/* input styling */
+.inputstyling {
+  height: 30px;
+  width: 260px;
+  margin: 0.4em;
+}
+
+/*remove styling */
+.removeCSS {
+    all: unset;
+}
+
