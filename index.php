@@ -101,13 +101,12 @@
                 Select the quiz you would like to take:
               </h2>
 
-              <div class="buttons-homepage" style="padding-bottom: 2em;text-align: center;">
-                <div class="action-btn-homepage">
+              <div style="padding-bottom: 2em;text-align: center;">
 
                   <button
                     name="submit"
-                    style="height: 5em;width: 20em;"
-                    class="action-btn-homepage buttons-homepage-btnsize bgprimarycolor"
+                    style="height: 5em;width: 20em;display: inline-block;"
+                    class="bgprimarycolor"
                     type="submit"
                     value="Save"
                   >
@@ -116,8 +115,8 @@
 
                   <button 
                    name="submit"
-                   style="height: 5em;width: 20em;"
-                   class="action-btn-homepage buttons-homepage-btnsize bgprimarycolor"
+                   style="height: 5em;width: 20em;display: inline-block;"
+                   class="bgprimarycolor"
                    type="submit"
                    value="Cancel" 
                    >
@@ -126,7 +125,6 @@
 
                   <p id="saved"></p>
 
-                </div>
                </div>
              </section>
 

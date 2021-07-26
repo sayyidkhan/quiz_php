@@ -103,20 +103,9 @@ li {
 
 /* buttons on the same row */
 
-.buttons-homepage {
-width: 200px;
-margin: 0 auto;
-display: inline;
+.dotted {
+  border-style: dotted;
 }
-
-.action-btn-homepage {
-width: 200px;
-margin: 0 auto;
-display: inline;
-}
-
-
-
 
 
 
