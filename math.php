@@ -28,6 +28,16 @@
   checkCurrentSection();
   $current_section = $GLOBALS['current_section'];
 
+  //question type - set the title of the question type here
+  $GLOBALS['question_type'] = ['Addition','Subtraction','Division','Multiplication'];
+
+  //redirect to quiz page if true
+  $overallScore = 0; // <- load the total score here
+  $quizType = 'Math'; // <- specify quiz type here
+  if($_GET['quit'] == 'TRUE') {
+      $name = $_SESSION["login"];
+      header("Location: quizoutcome.php?name=$name&overallScore=$overallScore&quizType=$quizType");
+  }
 
 ?>
 
@@ -57,10 +67,10 @@
             <h2 class="primarycolor" style='padding-left: 2em;'>Welcome to Math Quiz.</h2> 
            </section>
 
-
+           <!-- quiz selection section -->
            <section id='quizsection-section'>
               <form name='quizsection-section' method='get' action='#quizsection-section'>
-                <span class='lg-text' style='padding-left: 2.4em;'><b>section:</b></span>
+                <span class='lg-text' style='padding-left: 2.4em;'><b>Section:</b></span>
                 <button 
                 <?php echo ($GLOBALS['current_section'] == '1') ? 'disabled="true" style="background-color: lightblue;pointer-events: none;color: white;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value='1'>1</button>
@@ -73,45 +83,30 @@
                 <button
                 <?php echo ($GLOBALS['current_section'] == '4') ? 'disabled="true" style="background-color: lightblue;pointer-events: none;color: white;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value='4'>4</button>
-                <p><?php echo $GLOBALS['current_section']; ?> </p>
               </form>
            </section>
 
-           <section id="quizselection-section" style="<?php echo(empty($_SESSION['login']) ? 'display: none;' : '') ?>">
-              <h2 class="centerText">
-                Select the quiz you would like to take:
-              </h2>
+           <!-- questions to student -->
+           <section id='studentqn-section' style='margin-top:2.5em;margin-bottom:2.5em;'>
+              <span class='lg-text' style='padding-left: 2.4em;'><b>Question Type:</b> <span><?php echo $GLOBALS['question_type'][intval($GLOBALS['current_section']) - 1] ?></span></span>
+           </section>
 
-              <div style="padding-bottom: 2em;text-align: center;">
-
-                  <a href='math.php'>
-                    <button
-                      name="submit"
-                      style="height: 5em;width: 20em;display: inline-block;"
-                      class="bgprimarycolor"
-                      type="submit"
-                      value="Save"
-                    >
-                      Math
-                    </button>
-                  </a>
-
-                  <a href='literature.php'>
-                    <button 
-                     name="submit"
-                     style="height: 5em;width: 20em;display: inline-block;"
-                     class="bgprimarycolor"
-                     type="submit"
-                     value="Cancel" 
-                     >
-                      Literature
-                     </button>
-                  </a>
-
-                  <p id="saved"></p>
-
-               </div>
-            </section>
+           <!-- navigation section -->
+           <section id='navigation-section'>
+              <form name='navigation-section' method='get' action='#quizsection-section'>
+                <span class='lg-text' style='padding-left: 2.4em;'><b>Navigation:</b></span>
+                <button 
+                <?php echo ($GLOBALS['current_section'] == '1') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
+                type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] > '1') ? intval($GLOBALS['current_section']) - 1  : '1' ?>>Back</button>
+                <button
+                <?php echo ($GLOBALS['current_section'] == '4') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
+                type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '4') ? intval($GLOBALS['current_section']) + 1  : '4' ?>>Next</button>
+                <button
+                type='submit' class='section-btn' name='current_section' value='3'>Submit</button>
+                <button
+                type='submit' class='section-btn' name='quit' value='TRUE'>Exit</button>
+              </form>
+           </section>
 
           </div>
         </div>
