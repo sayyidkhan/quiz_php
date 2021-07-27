@@ -103,25 +103,29 @@
 
               <div style="padding-bottom: 2em;text-align: center;">
 
-                  <button
-                    name="submit"
-                    style="height: 5em;width: 20em;display: inline-block;"
-                    class="bgprimarycolor"
-                    type="submit"
-                    value="Save"
-                  >
-                    Math
-                  </button>
+                  <a href='math.php'>
+                    <button
+                      name="submit"
+                      style="height: 5em;width: 20em;display: inline-block;"
+                      class="bgprimarycolor"
+                      type="submit"
+                      value="Save"
+                    >
+                      Math
+                    </button>
+                  </a>
 
-                  <button 
-                   name="submit"
-                   style="height: 5em;width: 20em;display: inline-block;"
-                   class="bgprimarycolor"
-                   type="submit"
-                   value="Cancel" 
-                   >
-                    Literature
-                   </button>
+                  <a href='literature.php'>
+                    <button 
+                     name="submit"
+                     style="height: 5em;width: 20em;display: inline-block;"
+                     class="bgprimarycolor"
+                     type="submit"
+                     value="Cancel" 
+                     >
+                      Literature
+                     </button>
+                  </a>
 
                   <p id="saved"></p>
 

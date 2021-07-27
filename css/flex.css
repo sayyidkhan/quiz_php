@@ -54,6 +54,11 @@
 
 
 /* each box text size */
+.main-title {
+    font-size: 20px;
+    line-height: 0.6;
+}
+
 .bikeid-text {
     font-size: 16px;
     line-height: 0.6;
@@ -71,13 +76,13 @@
     line-height: 0.6;
 }
 
-.price-text {
+.lg-text {
     font-size: 22px;
     font-weight: bold;
     line-height: 0.8;
 }
 
-.price-text-div {
+.lg-text-div {
     float: right;
     margin-right: 0.5em;
 }

@@ -50,7 +50,6 @@ li {
   margin-bottom: 1em;
 }
 
-
 .centerText {
   text-align: center;
   vertical-align: middle;
@@ -101,11 +100,15 @@ li {
   display: inline;
 }
 
-/* buttons on the same row */
+/* buttons design */
 
-.dotted {
-  border-style: dotted;
+.section-btn {
+  margin: 1em;
+  height: 2em;
+  width: 4em;
 }
+
+
 
 
 
