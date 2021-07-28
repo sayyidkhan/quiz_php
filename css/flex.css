@@ -70,6 +70,12 @@
     color: red;
 }
 
+.mid-text {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 0.8;   
+}
+
 .title-text {
     font-size: 19px;
     font-weight: bold;
