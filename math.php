@@ -29,7 +29,7 @@
   $current_section = $GLOBALS['current_section'];
 
   //question type - set the title of the question type here
-  $GLOBALS['question_type'] = ['Addition','Subtraction','Division','Multiplication'];
+  $GLOBALS['question_type'] = ['Addition','Subtraction','Multiplication or Division'];
 
   //redirect to quiz page if true
   $overallScore = 0; // <- load the total score here
@@ -39,6 +39,41 @@
       header("Location: quizoutcome.php?name=$name&overallScore=$overallScore&quizType=$quizType");
   }
 
+?>
+
+<!-- set question here -->
+<?php
+  //1.set questions here
+  $questions = [
+    //first section
+    [
+      ["10 + 10",20], 
+      ["20 + 20",40],
+      ["30 + 30",60],
+      ["40 + 40",80],
+    ],
+    //second section
+    [
+      ["10 - 10",0], 
+      ["20 - 10",10],
+      ["30 - 10",20],
+      ["40 - 10",30],
+    ],
+    //third section
+    [
+      ["10 * 10",100], 
+      ["20 * 10",200],
+      ["30 / 10",3],
+      ["40 / 10",4],
+    ]
+  ];
+
+  //shuffle array
+  shuffle($questions[0]);
+  shuffle($questions[1]);
+  shuffle($questions[2]);
+  //assign back into variable
+  $GLOBALS['questions'] = $questions;
 ?>
 
 <!DOCTYPE html>
@@ -80,15 +115,91 @@
                 <button
                 <?php echo ($GLOBALS['current_section'] == '3') ? 'disabled="true" style="background-color: lightblue;pointer-events: none;color: white;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value='3'>3</button>
-                <button
-                <?php echo ($GLOBALS['current_section'] == '4') ? 'disabled="true" style="background-color: lightblue;pointer-events: none;color: white;" ' : ''; ?>
-                type='submit' class='section-btn' name='current_section' value='4'>4</button>
               </form>
            </section>
 
            <!-- questions to student -->
            <section id='studentqn-section' style='margin-top:2.5em;margin-bottom:2.5em;'>
               <span class='lg-text' style='padding-left: 2.4em;'><b>Question Type:</b> <span><?php echo $GLOBALS['question_type'][intval($GLOBALS['current_section']) - 1] ?></span></span>
+              <?php 
+              function renderQuestions($my_list_of_questions) {
+                 $mylist = $my_list_of_questions;
+                 $output = '';
+                 $counter = 1;
+                 foreach ($mylist as $value) {
+                    $questionNo = $counter;
+                    $questionHere = $value[0];
+                    $answerHere = $value[1];
+                    $test = $_POST["qn-$questionNo"];
+                    $output .= 
+                    "
+                    <tr class='ei-table-row'>
+                      <td style='width:3%;'>
+                        <span style='font-size:20px;'>$questionNo.</span>
+                      </td>
+                      <td>
+                        <span style='font-size:20px;'>$questionHere</span>
+                      </td>
+                      <td style='width: 7%;'>
+                        <!-- <form action='#quizsection-section' method='post' > -->
+                        <input style='margin-left: 1em;width: 170px;' type='number' name='qn-$questionNo' placeholder='answer for question $questionNo...'>
+                        <!-- </form> -->
+                      </td>
+                      <td style='width:3%;'>
+                        <span>CORRECT / INCORRECT</span>
+                        <span>$test</span>
+                      </td>
+                    </tr>
+                    
+                   
+                    <br><br>
+                    ";
+
+                    //increment counter
+                    $counter += 1;
+                 }
+                 return $output;
+              }
+
+              //init variables here
+              $currentSection = intval($GLOBALS['current_section']);
+              $currentSection -= 1;
+              $my_list_of_questions = $GLOBALS['questions'][$currentSection];
+              $tableRows = renderQuestions($my_list_of_questions);
+
+              echo
+              "
+              <div style='margin-left:4em;margin-top:-6em;margin-right: 5em;'>
+
+               <table class='ei-table'>
+
+                 <tr>
+                  <th>No</th>
+                  <th>Question</th>
+                  <th>Answer</th>
+                  <th>Result</th>  
+                 </tr>
+
+                 <!-- table rows rendered here -->
+                 $tableRows
+                 <!-- table rows rendered here -->
+               </table>
+
+              </div>
+              ";
+              ?>
+           </section>
+
+           <!-- score section -->
+           <section id='score-section' style='padding-left: 3.5em;padding-bottom: 1em;'>
+              <span>Current Section Score:&nbsp&nbsp</span><span class='primarycolor'><b></b></span>
+              <span>&nbsp&nbsp</span>
+              <span>Overall Score:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo $GLOBALS['overallScore'] ?></b></span>
+              <span>&nbsp&nbsp</span>
+              <span>Correct Answer:&nbsp&nbsp</span><span class='primarycolor'><b>0</b></span>
+              <span>&nbsp&nbsp</span>
+              <span>Incorrect Answer:&nbsp&nbsp</span><span class='primarycolor'><b>0</b></span>
+              <span>&nbsp&nbsp</span>
            </section>
 
            <!-- navigation section -->
@@ -99,8 +210,8 @@
                 <?php echo ($GLOBALS['current_section'] == '1') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] > '1') ? intval($GLOBALS['current_section']) - 1  : '1' ?>>Back</button>
                 <button
-                <?php echo ($GLOBALS['current_section'] == '4') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
-                type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '4') ? intval($GLOBALS['current_section']) + 1  : '4' ?>>Next</button>
+                <?php echo ($GLOBALS['current_section'] == '3') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
+                type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '3') ? intval($GLOBALS['current_section']) + 1  : '3' ?>>Next</button>
                 <button
                 type='submit' class='section-btn' name='current_section' value='3'>Submit</button>
                 <button
