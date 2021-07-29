@@ -7,8 +7,13 @@
   $flex_css = 'flex.css'; // flex css filename
   $tableui_css = 'tableui.css'; // flex css filename
 
+  //define this current filename and quiz type
   define('CURRENT_FILENAME', 'math.php'); //filename of this file
   define('QUIZ_TYPE','Math'); //define quiz type
+
+  //define alternate filename and quiz type
+  define('ALT_CURRENT_FILENAME', 'literature.php'); //filename of this file
+  define('ALT_QUIZ_TYPE','Literature');
 ?>
 
 <!-- manage global variables -->
@@ -328,10 +333,15 @@
                 type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '3') ? intval($GLOBALS['current_section']) + 1  : '3' ?>>Next</button>
               </form>
 
+              <span>
+                <a href='<?php echo ALT_CURRENT_FILENAME ?>'><button style='margin: 1em;height: 2em;width: 11em;'>Do <?php echo ALT_QUIZ_TYPE ?> Quiz</button></a>
+              </span>
+
               <form method='post' action='#quizsection-section' class='removeCSS'>
                  <button
                  <?php echo ($_SESSION['overallScore'] == '0') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
-                 type='submit' class='long-section-btn' name='reset' value='reset'>Reset Overall Score</button>
+                 style='margin: 1em;height: 2em;width: 11em;'
+                 type='submit' name='reset' value='reset'>Reset Overall Score</button>
               </form>
 
               <form method='get' action='#quizsection-section' class='removeCSS'>

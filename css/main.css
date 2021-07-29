@@ -104,17 +104,19 @@ li {
 
 /* buttons design */
 
+.long-section-btn {
+  margin: 1em;
+  height: 3em;
+  width: 9em; 
+}
+
 .section-btn {
   margin: 1em;
   height: 2em;
   width: 5em;
 }
 
-.long-section-btn {
-  margin: 1em;
-  height: 3em;
-  width: 9em; 
-}
+
 
 
 
