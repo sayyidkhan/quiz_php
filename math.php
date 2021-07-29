@@ -32,11 +32,20 @@
   //question type - set the title of the question type here
   $GLOBALS['question_type'] = ['Addition','Subtraction','Multiplication or Division'];
 
+  //init overall score
+  if(!isset($_SESSION['overallScore'])) {
+     $_SESSION['overallScore'] = 0;
+  } 
+  else {
+     //accumulate score here
+     $_SESSION['overallScore'] = 0;
+  }
+
   //redirect to quiz page if true
-  $overallScore = 0; // <- load the total score here
   $quizType = 'Math'; // <- specify quiz type here
   if($_GET['quit'] == 'TRUE') {
       $name = $_SESSION["login"];
+      $overallScore = $_SESSION['overallScore'];
       header("Location: quizoutcome.php?name=$name&overallScore=$overallScore&quizType=$quizType");
   }
 
@@ -99,7 +108,6 @@
 
 <!-- logic for sum -->
 <?php
-
 
 
 ?>
@@ -265,7 +273,7 @@
            <section id='score-section' style='padding-left: 3.5em;padding-bottom: 1em;'>
               <span>Current Section Score:&nbsp&nbsp</span><span class='primarycolor'><b></b></span>
               <span>&nbsp&nbsp</span>
-              <span>Overall Score:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo $GLOBALS['overallScore'] ?></b></span>
+              <span>Overall Score:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo strval($_SESSION['overallScore']) ?></b></span>
               <span>&nbsp&nbsp</span>
               <span>Correct Answer:&nbsp&nbsp</span><span class='primarycolor'><b>0</b></span>
               <span>&nbsp&nbsp</span>
