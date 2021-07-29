@@ -8,10 +8,16 @@
   $tableui_css = 'tableui.css'; // flex css filename
 
   define('CURRENT_FILENAME', 'math.php'); //filename of this file
+  define('QUIZ_TYPE','Math'); //define quiz type
 ?>
 
 <!-- manage global variables -->
 <?php
+
+  //set the wrong and correct answer global variable
+  $GLOBALS['correct_answer'] = 0;
+  $GLOBALS['wrong_answer'] = 0;
+  $GLOBALS['current_section_score'] = 0;
   
   function checkCurrentSection() {
       //if current page is not set, update current_section to 1 for page init
@@ -38,11 +44,16 @@
   } 
   else {
      //accumulate score here
-     $_SESSION['overallScore'] = 0;
+     $_SESSION['overallScore'];
+  }
+
+  //reset overall score if reset button is click
+  if(isset($_POST['reset'])) {
+    $_SESSION['overallScore'] = 0;
   }
 
   //redirect to quiz page if true
-  $quizType = 'Math'; // <- specify quiz type here
+  $quizType = QUIZ_TYPE; // <- specify quiz type here
   if($_GET['quit'] == 'TRUE') {
       $name = $_SESSION["login"];
       $overallScore = $_SESSION['overallScore'];
@@ -135,7 +146,7 @@
         <div id="content">
 
            <section id='login-section'>
-            <h2 class="primarycolor" style='padding-left: 2em;'>Welcome to Math Quiz. <?php echo $_POST['id-1']; ?></h2> 
+            <h2 class="primarycolor" style='padding-left: 2em;'>Welcome to <?php echo QUIZ_TYPE; ?> Quiz.</h2> 
            </section>
 
            <!-- quiz selection section -->
@@ -178,13 +189,34 @@
                     else {
                         //if correct display correct, else display wrong
                         if(strval($user_response) == strval($answer)) {
+                           $GLOBALS['correct_answer'] += 1; // correct answer increment by 1
+                           $GLOBALS['current_section_score'] += 5; // correct answer +5
                            return "CORRECT";
                         }
                         else {
+                           $GLOBALS['wrong_answer'] += 1; // wrong answer increment by 1
+                           $GLOBALS['current_section_score'] -= 3; // wrong answer -3
                            return "WRONG";
                         }
                     }
                  }
+                 function computeMarks($user_response,$answer) {
+                    //no input return 0
+                    if($user_response == '-') {
+                        return 0;
+                    }
+                    //else display input
+                    else {
+                        //if correct display correct, else display wrong
+                        if(strval($user_response) == strval($answer)) {
+                           return 5;
+                        }
+                        else {
+                           return -3;
+                        }
+                    }
+                 }
+
                  $mylist = $my_list_of_questions;
                  $output = '';
                  $counter = 1;
@@ -232,6 +264,9 @@
               $my_list_of_questions = $GLOBALS['questions'][$currentSection];
               $tableRows = renderQuestions($my_list_of_questions);
 
+              //update overall score (cummulative only)
+              $_SESSION['overallScore'] += $GLOBALS['current_section_score'];
+
               echo
               "
               <div style='margin-left:4em;margin-top:-6em;margin-right: 5em;'>
@@ -271,13 +306,13 @@
 
            <!-- score section -->
            <section id='score-section' style='padding-left: 3.5em;padding-bottom: 1em;'>
-              <span>Current Section Score:&nbsp&nbsp</span><span class='primarycolor'><b></b></span>
+              <span>Current Section Score:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo strval($GLOBALS['current_section_score']) ?></b></span>
               <span>&nbsp&nbsp</span>
               <span>Overall Score:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo strval($_SESSION['overallScore']) ?></b></span>
               <span>&nbsp&nbsp</span>
-              <span>Correct Answer:&nbsp&nbsp</span><span class='primarycolor'><b>0</b></span>
+              <span>Correct Answer:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo strval($GLOBALS['correct_answer']) ?></b></span>
               <span>&nbsp&nbsp</span>
-              <span>Incorrect Answer:&nbsp&nbsp</span><span class='primarycolor'><b>0</b></span>
+              <span>Incorrect Answer:&nbsp&nbsp</span><span class='primarycolor'><b><?php echo strval($GLOBALS['wrong_answer']) ?></b></span>
               <span>&nbsp&nbsp</span>
            </section>
 
@@ -291,19 +326,12 @@
                 <button
                 <?php echo ($GLOBALS['current_section'] == '3') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '3') ? intval($GLOBALS['current_section']) + 1  : '3' ?>>Next</button>
-                <!-- do not perform validation of result if back or next is used -->
-                <input name='validate_result' value='FALSE' hidden>
               </form>
 
               <form method='post' action='#quizsection-section' class='removeCSS'>
-                <button
-                type='submit' class='section-btn' name='abc'
-                value=
-                <?php 
-                echo ($GLOBALS['current_section'] == '3') ? '3' : intval($GLOBALS['current_section']) + 1 
-                ?>>Submit</button>
-                <!-- perform validation to result if submit button is clicked -->
-                <input name='validate_result' value='TRUE' hidden>
+                 <button
+                 <?php echo ($_SESSION['overallScore'] == '0') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
+                 type='submit' class='long-section-btn' name='reset' value='reset'>Reset Overall Score</button>
               </form>
 
               <form method='get' action='#quizsection-section' class='removeCSS'>
