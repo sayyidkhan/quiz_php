@@ -179,7 +179,7 @@
                     $my_qn_id_list = $GLOBALS['questions_id'];
                     $my_value = $my_qn_id_list[$id];
                     if(empty($my_value)) {
-                        return '-';
+                        return '';
                     }
                     else {
                         return $my_value;
@@ -187,13 +187,13 @@
                  }
                  function displayCorrectOrWrong($user_response,$answer) {
                     //no input return -
-                    if($user_response == '-') {
+                    if($user_response == '') {
                         return '-';
                     }
                     //else display input
                     else {
                         //if correct display correct, else display wrong
-                        if(strval($user_response) == strval($answer)) {
+                        if(strtolower(strval($user_response)) == strtolower(strval($answer))) {
                            $GLOBALS['correct_answer'] += 1; // correct answer increment by 1
                            $GLOBALS['current_section_score'] += 5; // correct answer +5
                            return "CORRECT";
@@ -202,22 +202,6 @@
                            $GLOBALS['wrong_answer'] += 1; // wrong answer increment by 1
                            $GLOBALS['current_section_score'] -= 3; // wrong answer -3
                            return "WRONG";
-                        }
-                    }
-                 }
-                 function computeMarks($user_response,$answer) {
-                    //no input return 0
-                    if($user_response == '-') {
-                        return 0;
-                    }
-                    //else display input
-                    else {
-                        //if correct display correct, else display wrong
-                        if(strval($user_response) == strval($answer)) {
-                           return 5;
-                        }
-                        else {
-                           return -3;
                         }
                     }
                  }

@@ -41,7 +41,7 @@
   $current_section = $GLOBALS['current_section'];
 
   //question type - set the title of the question type here
-  $GLOBALS['question_type'] = ['Book (1)','Book (2)','Multiplication or Division'];
+  $GLOBALS['question_type'] = ['Book (1)','Book (2)','Character Info'];
 
   //init overall score
   if(!isset($_SESSION['overallScore'])) {
@@ -73,24 +73,24 @@
   $questions = [
     //first section
     [
-      ["id-1","10 + 10",20], 
-      ["id-2","20 + 20",40],
-      ["id-3","30 + 30",60],
-      ["id-4","40 + 40",80],
+      ["id-1","Who wrote the Harry Potter and the Philosopher's Stone ?","j.k. rowling"], 
+      ["id-2","Who wrote the Harry Potter and the Chamber of Secrets ?","j.k. rowling"],
+      ["id-3","Who wrote the Harry Potter and the Prisoner of Azkaban ?","j.k. rowling"],
+      ["id-4","Who wrote the Harry Potter and the Goblet of Fire ?","j.k. rowling"],
     ],
     //second section
     [
-      ["id-5","10 - 10",0], 
-      ["id-6","20 - 10",10],
-      ["id-7","30 - 10",20],
-      ["id-8","40 - 10",30],
+      ["id-5","Who wrote the Harry Potter and the Order of the Phoenix ?","j.k. rowling"], 
+      ["id-6","Who wrote the Harry Potter and the Half-Blood Prince ?","j.k. rowling"],
+      ["id-7","Who wrote the Harry Potter and the Deathly Hallows ?","j.k. rowling"],
+      ["id-8","Who Fantastic Beasts and Where to Find Them ?","j.k. rowling"],
     ],
     //third section
     [
-      ["id-9","10 * 10",100], 
-      ["id-10","20 * 10",200],
-      ["id-11","30 / 10",3],
-      ["id-12","40 / 10",4],
+      ["id-9","Which group did Harry Potter belong to in the Harry Potter storyline ?","Gryffindor"], 
+      ["id-10","Who was Harry potter archnemesis in the Harry Potter storyline ?","Voldemort"],
+      ["id-11","What was the name of the school which Harry potter went to in the Harry Potter storyline ?",'Hogwarts'],
+      ["id-12","What was the name of Harry Potter's owl ?","Hedwig"],
     ]
   ];
 
@@ -179,7 +179,7 @@
                     $my_qn_id_list = $GLOBALS['questions_id'];
                     $my_value = $my_qn_id_list[$id];
                     if(empty($my_value)) {
-                        return '-';
+                        return '';
                     }
                     else {
                         return $my_value;
@@ -187,13 +187,13 @@
                  }
                  function displayCorrectOrWrong($user_response,$answer) {
                     //no input return -
-                    if($user_response == '-') {
+                    if($user_response == '') {
                         return '-';
                     }
                     //else display input
                     else {
                         //if correct display correct, else display wrong
-                        if(strval($user_response) == strval($answer)) {
+                        if(trim(strtolower(strval($user_response))) == trim(strtolower(strval($answer)))) {
                            $GLOBALS['correct_answer'] += 1; // correct answer increment by 1
                            $GLOBALS['current_section_score'] += 5; // correct answer +5
                            return "CORRECT";
@@ -202,22 +202,6 @@
                            $GLOBALS['wrong_answer'] += 1; // wrong answer increment by 1
                            $GLOBALS['current_section_score'] -= 3; // wrong answer -3
                            return "WRONG";
-                        }
-                    }
-                 }
-                 function computeMarks($user_response,$answer) {
-                    //no input return 0
-                    if($user_response == '-') {
-                        return 0;
-                    }
-                    //else display input
-                    else {
-                        //if correct display correct, else display wrong
-                        if(strval($user_response) == strval($answer)) {
-                           return 5;
-                        }
-                        else {
-                           return -3;
                         }
                     }
                  }
@@ -244,7 +228,7 @@
                       <td style='width: 7%;'>
                         <input 
                         style='margin-left: 1em;width: 170px;'
-                        type='number'
+                        type='text'
                         name='$id'
                         value='$valueInput'
                         placeholder='answer for question $questionNo...'>
