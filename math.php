@@ -12,6 +12,7 @@
 
 <!-- manage global variables -->
 <?php
+  
   function checkCurrentSection() {
       //if current page is not set, update current_section to 1 for page init
       if(!isset($_GET['current_section'])) {
@@ -47,24 +48,24 @@
   $questions = [
     //first section
     [
-      ["10 + 10",20], 
-      ["20 + 20",40],
-      ["30 + 30",60],
-      ["40 + 40",80],
+      ["id-1","10 + 10",20], 
+      ["id-2","20 + 20",40],
+      ["id-3","30 + 30",60],
+      ["id-4","40 + 40",80],
     ],
     //second section
     [
-      ["10 - 10",0], 
-      ["20 - 10",10],
-      ["30 - 10",20],
-      ["40 - 10",30],
+      ["id-5","10 - 10",0], 
+      ["id-6","20 - 10",10],
+      ["id-7","30 - 10",20],
+      ["id-8","40 - 10",30],
     ],
     //third section
     [
-      ["10 * 10",100], 
-      ["20 * 10",200],
-      ["30 / 10",3],
-      ["40 / 10",4],
+      ["id-9","10 * 10",100], 
+      ["id-10","20 * 10",200],
+      ["id-11","30 / 10",3],
+      ["id-12","40 / 10",4],
     ]
   ];
 
@@ -74,6 +75,33 @@
   shuffle($questions[2]);
   //assign back into variable
   $GLOBALS['questions'] = $questions;
+
+  //2. extract the question id from questions_array
+  // also map all post id as a value in this associative array where the key is the id of the question
+  function getQuestionId($myArray) {
+    $result = array();
+    foreach ($myArray as $section) {
+      foreach($section as $rows) {
+        $myId = $rows[0];
+        $value = $_POST[strval($myId)];
+        $result[$myId] = $value;
+      }
+    }
+    return $result;
+  }
+  $questionsID = getQuestionId($questions);
+  $GLOBALS['questions_id'] = $questionsID;
+
+  //see the stored value of POST request upon submission
+  //echo print_r($questionsID);
+?>
+
+
+<!-- logic for sum -->
+<?php
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +127,7 @@
         <div id="content">
 
            <section id='login-section'>
-            <h2 class="primarycolor" style='padding-left: 2em;'>Welcome to Math Quiz.</h2> 
+            <h2 class="primarycolor" style='padding-left: 2em;'>Welcome to Math Quiz. <?php echo $_POST['id-1']; ?></h2> 
            </section>
 
            <!-- quiz selection section -->
@@ -123,14 +151,42 @@
               <span class='lg-text' style='padding-left: 2.4em;'><b>Question Type:</b> <span><?php echo $GLOBALS['question_type'][intval($GLOBALS['current_section']) - 1] ?></span></span>
               <?php 
               function renderQuestions($my_list_of_questions) {
+                 function getValueFromPOST($id) {
+                    $my_qn_id_list = $GLOBALS['questions_id'];
+                    $my_value = $my_qn_id_list[$id];
+                    if(empty($my_value)) {
+                        return '-';
+                    }
+                    else {
+                        return $my_value;
+                    }
+                 }
+                 function displayCorrectOrWrong($user_response,$answer) {
+                    //no input return -
+                    if($user_response == '-') {
+                        return '-';
+                    }
+                    //else display input
+                    else {
+                        //if correct display correct, else display wrong
+                        if(strval($user_response) == strval($answer)) {
+                           return "CORRECT";
+                        }
+                        else {
+                           return "WRONG";
+                        }
+                    }
+                 }
                  $mylist = $my_list_of_questions;
                  $output = '';
                  $counter = 1;
                  foreach ($mylist as $value) {
                     $questionNo = $counter;
-                    $questionHere = $value[0];
-                    $answerHere = $value[1];
-                    $test = $_POST["qn-$questionNo"];
+                    $id = $value[0]; // id format: "id-1"
+                    $questionHere = $value[1];
+                    $answerHere = $value[2];
+                    $valueInput = getValueFromPOST($id);
+                    $outcomeOfAnswer = displayCorrectOrWrong($valueInput,$answerHere);
                     $output .= 
                     "
                     <tr class='ei-table-row'>
@@ -141,20 +197,21 @@
                         <span style='font-size:20px;'>$questionHere</span>
                       </td>
                       <td style='width: 7%;'>
-                        <!-- <form action='#quizsection-section' method='post' > -->
-                        <input style='margin-left: 1em;width: 170px;' type='number' name='qn-$questionNo' placeholder='answer for question $questionNo...'>
-                        <!-- </form> -->
+                        <input 
+                        style='margin-left: 1em;width: 170px;'
+                        type='number'
+                        name='$id'
+                        value='$valueInput'
+                        placeholder='answer for question $questionNo...'>
                       </td>
                       <td style='width:3%;'>
-                        <span>CORRECT / INCORRECT</span>
-                        <span>$test</span>
+                        <span>$outcomeOfAnswer</span>
                       </td>
                     </tr>
                     
                    
                     <br><br>
                     ";
-
                     //increment counter
                     $counter += 1;
                  }
@@ -180,9 +237,23 @@
                   <th>Result</th>  
                  </tr>
 
-                 <!-- table rows rendered here -->
-                 $tableRows
-                 <!-- table rows rendered here -->
+                 <form method='post' action='#quizsection-section'>
+                   <!-- table rows rendered here -->
+                   $tableRows
+                   <!-- table rows rendered here -->
+
+                   <!-- submit button here -->
+                   <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>  
+                      <button type='submit' class='section-btn' name='abc' value='submit'>Submit</button>
+                    </td>
+                   </tr>
+                   <!-- submit button here -->
+                  </form>
+
                </table>
 
               </div>
@@ -204,7 +275,7 @@
 
            <!-- navigation section -->
            <section id='navigation-section'>
-              <form name='navigation-section' method='get' action='#quizsection-section'>
+              <form method='get' action='#quizsection-section' class='removeCSS'>
                 <span class='lg-text' style='padding-left: 2.4em;'><b>Navigation:</b></span>
                 <button 
                 <?php echo ($GLOBALS['current_section'] == '1') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
@@ -212,11 +283,26 @@
                 <button
                 <?php echo ($GLOBALS['current_section'] == '3') ? 'disabled="true" style="background-color: lightgrey;pointer-events: none;color: grey;" ' : ''; ?>
                 type='submit' class='section-btn' name='current_section' value=<?php echo ($GLOBALS['current_section'] < '3') ? intval($GLOBALS['current_section']) + 1  : '3' ?>>Next</button>
+                <!-- do not perform validation of result if back or next is used -->
+                <input name='validate_result' value='FALSE' hidden>
+              </form>
+
+              <form method='post' action='#quizsection-section' class='removeCSS'>
                 <button
-                type='submit' class='section-btn' name='current_section' value='3'>Submit</button>
+                type='submit' class='section-btn' name='abc'
+                value=
+                <?php 
+                echo ($GLOBALS['current_section'] == '3') ? '3' : intval($GLOBALS['current_section']) + 1 
+                ?>>Submit</button>
+                <!-- perform validation to result if submit button is clicked -->
+                <input name='validate_result' value='TRUE' hidden>
+              </form>
+
+              <form method='get' action='#quizsection-section' class='removeCSS'>
                 <button
                 type='submit' class='section-btn' name='quit' value='TRUE'>Exit</button>
               </form>
+
            </section>
 
           </div>
