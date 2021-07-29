@@ -62,17 +62,8 @@
                         echo '*login cannot be blank'; 
                     }
                     elseif(isset($_POST['quiz-login']) && !empty($_POST['login'])) {
-                        //$bikeList = $GLOBALS['BikesforSale'];
                         $validateLogin = $_POST['login'];
                         $loginStatus = true;
-                        //search for name
-                        // foreach ($bikeList as $key => $instance) {
-                        //     $name = $instance->name;
-                        //     if($validateLogin === $name) {
-                        //       $loginStatus = true;
-                        //         break;
-                        //     }
-                        // }
 
                         //if login status is successful
                         if($loginStatus) { 
@@ -87,6 +78,7 @@
                         }
                     }
                     elseif(isset($_POST['quiz-logout'])) {
+                        unset($_SESSION['overallScore']); // unset overall score
                         session_destroy();
                         header("Refresh: 0.1");
                     }

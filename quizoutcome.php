@@ -33,22 +33,77 @@
           </div>
         </div>
 
+
+          <section id='login-section'>
+            <h3 class="centerText primarycolor">You can choose to logout here to change to a different user.</h3>
+
+            <div class="container">
+              <form 
+              method='post'
+              name='login-name'
+              class="bikesearch boxsizing"
+              action="#quizselection-section" 
+              style="margin:auto;max-width:600px;margin-bottom: 2em;padding-left: 4em;padding-right: 2em;">
+                <?php
+                $login = $_SESSION["login"];
+                $disabled = empty($_SESSION['login']) ? '' : 'disabled="true"';
+                $bikesearchQuery =
+                "<input class='boxsizing' type='text' placeholder='enter your name...' name='login' value='$login' $disabled >";
+                echo $bikesearchQuery;
+                ?>
+                <button name='quiz-logout' class="boxsizing lightbluecolor" type="submit" value='logout'
+                <?php echo empty($_SESSION['login']) ? 'disabled="true" style="background-color: #C0C0C0;pointer-events: none;"' : ''; ?>
+                >logout</button>
+                <button name='quiz-login' class="boxsizing" type="submit" value='submit'
+                <?php echo empty($_SESSION['login']) ? '' : 'disabled="true" style="background-color: #C0C0C0;pointer-events: none;"'; ?>
+                >login</button>
+                <p class='required-text' style='padding-top: 1em;padding-right: 9em;'>
+                  <?php
+                    //for detecting empty value (search button clicked but query is empty)
+                    if (isset($_POST['quiz-login']) && empty($_POST['login'])) {
+                        $_SESSION["login"] = '';
+                        session_unset();
+                        echo '*login cannot be blank'; 
+                    }
+                    elseif(isset($_POST['quiz-login']) && !empty($_POST['login'])) {
+                        $validateLogin = $_POST['login'];
+                        $loginStatus = true;
+
+                        //if login status is successful
+                        if($loginStatus) { 
+                           $_SESSION["login"] = $validateLogin;
+                           //refresh UI to update session
+                           header("Refresh: 0.1");
+                        }
+                        else {
+                           $_SESSION["login"] = '';
+                           session_unset();
+                           echo '*name does not exist or not in system';
+                        }
+                    }
+                    elseif(isset($_POST['quiz-logout'])) {
+                        unset($_SESSION['overallScore']); // unset overall score
+                        session_destroy();
+                        header("Location: quizoutcome.php");
+                    }
+                  ?>
+                </p>
+              </form>
+              <!-- login using name -->
+            </section>
+
+
         <div id="content">
 
-           <section id='userinfo-section' style='margin-bottom: 5em;'>
-            <h2 class="centerText primarycolor">
-              <span>Good job </span><span style='color: darkblue;'><?php echo strtoupper($_GET['name']) ?></span><span> on attempting the questions</span>
-            </h2>
-            <h3 class="centerText">
-              <span>Quiz Type: </span><span class="primarycolor"><?php echo strtoupper($_GET['quizType']) ?></span>
-            </h3>
-            <h2 class="centerText">
-              <span>Your overall quiz score is: </span><span class="primarycolor"><?php echo strtoupper($_GET['overallScore']) ?></span>
-            </h2>
-           </section>
-
-           <section id='logout-section'>
-
+           <section id='userinfo-section' style="<?php echo(empty($_GET['name']) ? 'display: none;' : '') ?>">
+            <div style='margin-bottom: 5em;'>
+              <h2 class="centerText primarycolor">
+                <span>Good job </span><span style='color: darkblue;'><?php echo strtoupper($_GET['name']) ?></span><span> on attempting the questions</span>
+              </h2>
+              <h2 class="centerText">
+                <span>Your overall quiz score is: </span><span class="primarycolor"><?php echo strtoupper($_GET['overallScore']) ?></span>
+              </h2>
+            </div>
            </section>
 
             <section id="quizselection-section" style="<?php echo(empty($_SESSION['login']) ? 'display: none;' : '') ?>">
